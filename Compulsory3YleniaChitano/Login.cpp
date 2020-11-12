@@ -3,6 +3,7 @@
 #include <conio.h> // Needed for _getch
 #include <fstream> // Needed for the password file I/O
 #include <string>
+#include "Header.h"
 
 void menu();
 void create();
@@ -98,6 +99,12 @@ choice:
     {
         create();
         menu();
+    }
+
+    if (choice == '2')
+    {
+       play();
+       
     }
 
     else if (choice == '3')
