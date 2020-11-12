@@ -12,6 +12,7 @@ void printBoard(std::vector <std::vector<char>>& board);
 void printPlayerBoard(std::vector <std::vector<char>>& board);
 void shoot(std::vector <std::vector<char>>& board, int& numberOfShots, int& numberOfHits);
 void play();
+void makeBoard3(int numberOfShips, std::vector <std::vector<char>>& board);
 
 int numberOfShips = 2;
 int M = 6;
@@ -70,7 +71,7 @@ void makeEmptyBoard(std::vector <std::vector<char>>& board)
 
 
 
-    makeBoard(numberOfShips, board);
+    makeBoard3(numberOfShips, board);
 
 
 }
@@ -812,3 +813,71 @@ cell:
 }
 
 
+void makeBoard3(int numberOfShips, std::vector <std::vector<char>>& board)
+{
+    char SHIP = 'S';
+    for (int i = 0; i < numberOfShips; i++)
+    {
+        int choose;
+        srand(std::time(0));
+        choose = (rand() % 1);
+
+        if (choose == 1) {
+            if (board[randomRow()][randomColumn()] != SHIP && board[randomRow() + 1][randomColumn()] != SHIP && board[randomRow() + 2][randomColumn()] != SHIP && (randomRow() + 2) <= M)
+            {
+                board[randomRow()][randomColumn()] = SHIP;
+                board[randomRow() + 1][randomColumn()] = SHIP;
+                board[randomRow() + 2][randomColumn()] = SHIP;
+            }
+
+            else if (board[randomRow()][randomColumn()] != SHIP && board[randomRow() + 1][randomColumn()] != SHIP && board[randomRow() - 1][randomColumn()] != SHIP && (randomRow() + 1) <= M && (randomRow() - 1) >= 0)
+            {
+                board[randomRow()][randomColumn()] = SHIP;
+                board[randomRow() + 1][randomColumn()] = SHIP;
+                board[randomRow() - 1][randomColumn()] = SHIP;
+            }
+
+            else if (board[randomRow()][randomColumn()] != SHIP && board[randomRow() - 1][randomColumn()] != SHIP && board[randomRow() - 2][randomColumn()] != SHIP && (randomRow() - 2) >= 0)
+            {
+                board[randomRow()][randomColumn()] = SHIP;
+                board[randomRow() -2][randomColumn()] = SHIP;
+                board[randomRow() - 1][randomColumn()] = SHIP;
+            }
+
+            else
+            {
+                i = i - 1;
+            }
+        }
+
+        else
+        {
+            if ((randomColumn() + 2) <= N && board[randomRow()][randomColumn()] != SHIP && board[randomRow() ][randomColumn() + 1] != SHIP && board[randomRow() ][randomColumn()+2] != SHIP )
+            {
+                board[randomRow()][randomColumn()] = SHIP;
+                board[randomRow() ][randomColumn()+1] = SHIP;
+                board[randomRow() ][randomColumn()+2] = SHIP;
+            }
+
+            else if ((randomColumn() + 1) <= N && (randomColumn() - 1) >= 0 && board[randomRow()][randomColumn()] != SHIP && board[randomRow() ][randomColumn()+1] != SHIP && board[randomRow() ][randomColumn()-1] != SHIP )
+            {
+                board[randomRow()][randomColumn()] = SHIP;
+                board[randomRow() ][randomColumn()+1] = SHIP;
+                board[randomRow() ][randomColumn() -1] = SHIP;
+            }
+
+            else if ((randomColumn() - 2) >= 0 && board[randomRow()][randomColumn()] != SHIP && board[randomRow() ][randomColumn()-1] != SHIP && board[randomRow() ][randomColumn()-2] != SHIP )
+            {
+                board[randomRow()][randomColumn()] = SHIP;
+                board[randomRow() ][randomColumn() -1] = SHIP;
+                board[randomRow() ][randomColumn() - 2] = SHIP;
+            }
+
+            else
+            {
+                i = i - 1;
+            }
+        }
+    }
+
+}
