@@ -3,14 +3,20 @@
 #include <ctime>
 #include <vector>
 #include <string>
+#include <windows.h>
+#include "header.h"
 
 void makeEmptyBoard(std::vector <std::vector<char>>& board);
+void makeEmptyBoard2(std::vector <std::vector<char>>& playerBoard);
 int randomRow();
+int randomColumn();
 void writeLetters();
 void makeBoard(int numberOfShips, std::vector <std::vector<char>>& board);
 void printBoard(std::vector <std::vector<char>>& board);
+void printAIBoard(std::vector <std::vector<char>>& playerBoard);
 void printPlayerBoard(std::vector <std::vector<char>>& board);
 void shoot(std::vector <std::vector<char>>& board, int& numberOfShots, int& numberOfHits);
+void AIshoot(std::vector <std::vector<char>>& playerBoard, int& numberOfShots2, int& numberOfHits2);
 void play();
 void makeBoard3(int numberOfShips, std::vector <std::vector<char>>& board);
 
@@ -24,27 +30,39 @@ void play()
 {
     int numberOfHits = 0;
     int numberOfShots = 0;
+    int numberOfHits2 = 0;
+    int numberOfShots2 = 0;
     int maxShots = 20;
     bool allShips = false;
     std::vector <std::vector <char>> board(M, std::vector<char>(N)); // A vector to store the content of the board
+    std::vector <std::vector <char>> playerBoard(M, std::vector<char>(N));
 
     makeEmptyBoard(board);
+    makeEmptyBoard2(playerBoard);
 
 
     while (numberOfShots <= maxShots && allShips == false)
     {
+        std::cout << "Your board: \n\n";
+        printAIBoard(playerBoard);
+        std::cout << "Opponent's board: \n\n";
         printPlayerBoard(board);
         shoot(board, numberOfShots, numberOfHits);
-        if (numberOfHits == numberOfShips)
+        AIshoot(playerBoard, numberOfShots2, numberOfHits2);
+        if ((numberOfHits == numberOfShips) | (numberOfHits2 == numberOfShips) )
         {
             allShips = true;
         }
+        
     }
 
-
+    std::cout << "Your board: \n\n";
+    printAIBoard(playerBoard);
+    std::cout << "Opponent's board: \n\n";
     printBoard(board);
     std::cout << "Number of shots: " << numberOfShots << std::endl;
     std::cout << "Number of hits: " << numberOfHits << std::endl;
+    menu();
 
 
 
@@ -71,7 +89,33 @@ void makeEmptyBoard(std::vector <std::vector<char>>& board)
 
 
 
-    makeBoard3(numberOfShips, board);
+    makeBoard(numberOfShips, board);
+
+
+}
+
+void makeEmptyBoard2(std::vector <std::vector<char>>& playerBoard)
+{
+    char BLANK = NULL;
+
+
+    for (int i = 0; i < M; i++)
+    {
+
+        for (int j = 0; j < N; j++) {
+
+
+
+            playerBoard[i][j] = BLANK;
+
+
+        }
+
+    }
+
+
+
+    makeBoard(numberOfShips, playerBoard);
 
 
 }
@@ -80,6 +124,7 @@ int randomRow()
 {
     int index;
     srand(std::time(0));
+    Sleep(((rand() % 2)+1) * 1000);
     index = (rand() % M);
 
     return index;
@@ -89,6 +134,7 @@ int randomColumn()
 {
     int index;
     srand(std::time(0));
+    Sleep(((rand() % 2)+1) * 1000);
     index = (rand() % N);
 
     return index;
@@ -135,7 +181,7 @@ void printBoard(std::vector <std::vector<char>>& board)
                 std::cout << "|";
             }
 
-            if (board[i][j] == 'H' | board[i][j] == 'M' | board[i][j] == 'S')
+            if ((board[i][j] == 'H') | (board[i][j] == 'M') | (board[i][j] == 'S'))
             {
                 std::cout << board[i][j];
             }
@@ -172,7 +218,7 @@ void printPlayerBoard(std::vector <std::vector<char>>& board)
                 std::cout << "|";
             }
 
-            if (board[i][j] == 'H' | board[i][j] == 'M')
+            if ((board[i][j] == 'H') | (board[i][j] == 'M'))
             {
                 std::cout << board[i][j];
             }
@@ -195,627 +241,134 @@ void printPlayerBoard(std::vector <std::vector<char>>& board)
     std::cout << std::endl;
 }
 
+void printAIBoard(std::vector <std::vector<char>>& playerBoard)
+
+{
+    for (int i = 0; i < M; i++) {
+
+
+
+        for (int j = 0; j < N; j++) {
+
+            if (j == 0)
+            {
+                std::cout << (i + 1);
+                std::cout << "|";
+            }
+
+            if ((playerBoard[i][j] == 'H') | (playerBoard[i][j] == 'M') | (playerBoard[i][j] == 'S'))
+            {
+                std::cout << playerBoard[i][j];
+            }
+
+            else
+            {
+                std::cout << " ";
+            }
+
+
+
+            std::cout << "|";
+
+
+
+        }
+        std::cout << std::endl;
+    }
+    writeLetters();
+    std::cout << std::endl;
+
+}
+
 void shoot(std::vector <std::vector<char>>& board, int& numberOfShots, int& numberOfHits)
 {
     std::string cell;
 cell:
     std::cout << "Which cell would you like to shoot at? (Please use the format column row, example: B3))\n";
     std::cin >> cell;
+    std::cout << "Cell: " << cell << std::endl;
 
     std::vector <char> coordinates(cell.begin(), cell.end());
     coordinates.at(0) = toupper(coordinates.at(0));
-    std::vector <int> numericCoordinates[2];
+    std::cout << "coordinates.at(0): " << coordinates.at(0) << std::endl;
+    std::cout << "coordinates.at(1): " << coordinates.at(1) << std::endl;
+    std::vector <int> numericCoordinates(2);
+  
+    numericCoordinates.at(0) = (int)((coordinates.at(0)) - 65);
+    numericCoordinates.at(1) = (int)((coordinates.at(1)) - 49);
 
-
-    if (coordinates.at(0) == 'A')
+    std::cout << "numericCoordinates.at(0): " << numericCoordinates.at(0) << std::endl;
+    std::cout << "numericCoordinates.at(1): " << numericCoordinates.at(1) << std::endl;
+    if ( (( (int)(coordinates.at(0) - 65)) >= 0) && (((int)(coordinates.at(0) - 65)) <= N) && (((int)(coordinates.at(1) - 49)) >= 0) && (((int)(coordinates.at(1) - 49)) <= M))
     {
-
-        if (coordinates.at(1) == '1')
-
+        if (board[numericCoordinates.at(1)][numericCoordinates.at(0)] == 'S')
         {
-
-
-            if (board[0][0] == 'S')
-            {
-                board[0][0] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[0][0] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '2')
-        {
-            if (board[1][0] == 'S')
-            {
-                board[1][0] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[1][0] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '3')
-        {
-            if (board[2][0] == 'S')
-            {
-                board[2][0] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[2][0] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '4')
-        {
-            if (board[3][0] == 'S')
-            {
-                board[3][0] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[3][0] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '5')
-        {
-            if (board[4][0] == 'S')
-            {
-                board[4][0] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[4][0] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '6')
-        {
-            if (board[5][0] == 'S')
-            {
-                board[5][0] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[5][0] = 'M';
-
-            }
+            board[numericCoordinates.at(1)][numericCoordinates.at(0)] = 'H';
+            numberOfHits++;
         }
 
         else
         {
-            std::cout << "Invalid input.\n";
-            goto cell;
+            board[numericCoordinates.at(1)][numericCoordinates.at(0)] = 'M';
         }
     }
-
-    if (coordinates.at(0) == 'B')
+    else
     {
-        if (coordinates.at(1) == '1')
-        {
-            if (board[0][1] == 'S')
-            {
-                board[0][1] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[0][1] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '2')
-        {
-            if (board[1][1] == 'S')
-            {
-                board[1][1] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[1][1] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '3')
-        {
-            if (board[2][1] == 'S')
-            {
-                board[2][1] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[2][1] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '4')
-        {
-            if (board[3][1] == 'S')
-            {
-                board[3][1] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[3][1] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '5')
-        {
-            if (board[4][1] == 'S')
-            {
-                board[4][1] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[4][1] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '6')
-        {
-            if (board[5][1] == 'S')
-            {
-                board[5][1] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[5][1] = 'M';
-
-            }
-        }
-
-        else
-        {
-            std::cout << "Invalid input.\n";
-            goto cell;
-        }
+        std::cout << "Invalid input.\n";
+        goto cell;
     }
-
-    if (coordinates.at(0) == 'C')
-    {
-        if (coordinates.at(1) == '1')
-        {
-            if (board[0][2] == 'S')
-            {
-                board[0][2] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[0][2] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '2')
-        {
-            if (board[1][2] == 'S')
-            {
-                board[1][2] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[1][2] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '3')
-        {
-            if (board[2][2] == 'S')
-            {
-                board[2][2] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[2][2] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '4')
-        {
-            if (board[3][2] == 'S')
-            {
-                board[3][2] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[3][2] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '5')
-        {
-            if (board[4][2] == 'S')
-            {
-                board[4][2] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[4][2] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '6')
-        {
-            if (board[5][2] == 'S')
-            {
-                board[5][2] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[5][2] = 'M';
-
-            }
-        }
-
-        else
-        {
-            std::cout << "Invalid input.\n";
-            goto cell;
-        }
-    }
-
-    if (coordinates.at(0) == 'D')
-    {
-        if (coordinates.at(1) == '1')
-        {
-            if (board[0][3] == 'S')
-            {
-                board[0][3] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[0][3] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '2')
-        {
-            if (board[1][3] == 'S')
-            {
-                board[1][3] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[1][3] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '3')
-        {
-            if (board[2][3] == 'S')
-            {
-                board[2][3] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[2][3] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '4')
-        {
-            if (board[3][3] == 'S')
-            {
-                board[3][3] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[3][3] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '5')
-        {
-            if (board[4][3] == 'S')
-            {
-                board[4][3] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[4][3] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '6')
-        {
-            if (board[5][3] == 'S')
-            {
-                board[5][3] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[5][3] = 'M';
-
-            }
-        }
-
-        else
-        {
-            std::cout << "Invalid input.\n";
-            goto cell;
-        }
-    }
-
-    if (coordinates.at(0) == 'E')
-    {
-        if (coordinates.at(1) == '1')
-        {
-            if (board[0][4] == 'S')
-            {
-                board[0][4] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[0][4] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '2')
-        {
-            if (board[1][4] == 'S')
-            {
-                board[1][4] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[1][4] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '3')
-        {
-            if (board[2][4] == 'S')
-            {
-                board[2][4] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[2][4] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '4')
-        {
-            if (board[3][4] == 'S')
-            {
-                board[3][4] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[3][4] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '5')
-        {
-            if (board[4][4] == 'S')
-            {
-                board[4][4] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[4][4] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '6')
-        {
-            if (board[5][4] == 'S')
-            {
-                board[5][4] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[5][4] = 'M';
-
-            }
-        }
-
-        else
-        {
-            std::cout << "Invalid input.\n";
-            goto cell;
-        }
-    }
-
-    if (coordinates.at(0) == 'F')
-    {
-        if (coordinates.at(1) == '1')
-        {
-            if (board[0][5] == 'S')
-            {
-                board[0][5] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[0][5] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '2')
-        {
-            if (board[1][5] == 'S')
-            {
-                board[1][5] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[1][5] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '3')
-        {
-            if (board[2][5] == 'S')
-            {
-                board[2][5] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[2][5] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '4')
-        {
-            if (board[3][5] == 'S')
-            {
-                board[3][5] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[3][5] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '5')
-        {
-            if (board[4][5] == 'S')
-            {
-                board[4][5] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[4][5] = 'M';
-
-            }
-        }
-
-        else if (coordinates.at(1) == '6')
-        {
-            if (board[5][5] == 'S')
-            {
-                board[5][5] = 'H';
-                numberOfHits++;
-            }
-
-            else
-            {
-                board[5][5] = 'M';
-
-            }
-        }
-
-        else
-        {
-            std::cout << "Invalid input.\n";
-            goto cell;
-        }
-
-
-    }
-
-
 
     numberOfShots++;
+
+
+   
+}
+
+
+void AIshoot(std::vector <std::vector<char>>& playerBoard, int& numberOfShots2, int& numberOfHits2)
+{
+   
+cell:
+    int pick;
+    srand(std::time(0));
+    pick = (rand() % (M));
+
+
+    int pick2;
+    srand(std::time(0));
+    Sleep(((rand() % 2)+1) * 1000);
+    pick2 = (rand() % (N));
+   
+
+
+    if ((playerBoard[pick][pick2] == 'M') | (playerBoard[pick][pick2] == 'H'))
+    {
+        goto cell;
+    }
+
+    else 
+    {
+        if (playerBoard[pick][pick2] == 'S')
+        {
+            playerBoard[pick][pick2] = 'H';
+            numberOfHits2++;
+        }
+        else
+        {
+            playerBoard[pick][pick2] = 'M';
+        }
+    }
+   
+   
+
+    numberOfShots2++;
+
 }
 
 
 void makeBoard3(int numberOfShips, std::vector <std::vector<char>>& board)
 {
-    char SHIP = 'S';
+    /*char SHIP = 'S';
     for (int i = 0; i < numberOfShips; i++)
     {
         int choose;
@@ -878,6 +431,6 @@ void makeBoard3(int numberOfShips, std::vector <std::vector<char>>& board)
                 i = i - 1;
             }
         }
-    }
+    }*/
 
 }
