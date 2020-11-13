@@ -292,24 +292,26 @@ cell:
     coordinates.at(0) = toupper(coordinates.at(0));
     std::cout << "coordinates.at(0): " << coordinates.at(0) << std::endl;
     std::cout << "coordinates.at(1): " << coordinates.at(1) << std::endl;
-    std::vector <int> numericCoordinates(2);
+    int letters = (int)((coordinates.at(0)) - 65);
+    int numbers= (int)((coordinates.at(1)) - 49);
+    //std::vector <int> numericCoordinates(2);
   
-    numericCoordinates.at(0) = (int)((coordinates.at(0)) - 65);
-    numericCoordinates.at(1) = (int)((coordinates.at(1)) - 49);
+    //numericCoordinates.at(0) = (int)((coordinates.at(0)) - 65);
+    //numericCoordinates.at(1) = (int)((coordinates.at(1)) - 49);
 
-    std::cout << "numericCoordinates.at(0): " << numericCoordinates.at(0) << std::endl;
-    std::cout << "numericCoordinates.at(1): " << numericCoordinates.at(1) << std::endl;
-    if ( (( (int)(coordinates.at(0) - 65)) >= 0) && (((int)(coordinates.at(0) - 65)) <= N) && (((int)(coordinates.at(1) - 49)) >= 0) && (((int)(coordinates.at(1) - 49)) <= M))
+    std::cout << "letters " << letters << std::endl;
+    std::cout << "numbers: " << numbers << std::endl;
+    if ( (letters >= 0) && (letters <= (N-1)) && (numbers >= 0) && (numbers <= (M-1))
     {
-        if (board[numericCoordinates.at(1)][numericCoordinates.at(0)] == 'S')
+        if (board[numbers][letters] == 'S')
         {
-            board[numericCoordinates.at(1)][numericCoordinates.at(0)] = 'H';
+            board[numbers][letters] = 'H';
             numberOfHits++;
         }
 
         else
         {
-            board[numericCoordinates.at(1)][numericCoordinates.at(0)] = 'M';
+            board[numbers][letters] = 'M';
         }
     }
     else
