@@ -89,7 +89,7 @@ void makeEmptyBoard(std::vector <std::vector<char>>& board)
 
 
 
-    makeBoard(numberOfShips, board);
+    makeBoard3(numberOfShips, board);
 
 
 }
@@ -286,18 +286,14 @@ void shoot(std::vector <std::vector<char>>& board, int& numberOfShots, int& numb
 cell:
     std::cout << "Which cell would you like to shoot at? (Please use the format column row, example: B3))\n";
     std::cin >> cell;
-    std::cout << "Cell: " << cell << std::endl;
+
 
     std::vector <char> coordinates(cell.begin(), cell.end());
     coordinates.at(0) = toupper(coordinates.at(0));
-    std::cout << "coordinates.at(0): " << coordinates.at(0) << std::endl;
-    std::cout << "coordinates.at(1): " << coordinates.at(1) << std::endl;
+
     int letters = (int)((coordinates.at(0)) - 65);
     int numbers= (int)((coordinates.at(1)) - 49);
 
-
-    std::cout << "letters " << letters << std::endl;
-    std::cout << "numbers: " << numbers << std::endl;
     if ( (letters >= 0) && (letters <= (N-1)) && (numbers >= 0) && (numbers <= (M-1)))
     {
         if (board[numbers][letters] == 'S')
@@ -367,22 +363,28 @@ cell:
 
 void makeBoard3(int numberOfShips, std::vector <std::vector<char>>& board)
 {
-    /*char SHIP = 'S';
+    char SHIP = 'S';
     for (int i = 0; i < numberOfShips; i++)
     {
         int choose;
         srand(std::time(0));
+        Sleep(((rand() % 2) + 1) * 1000);
         choose = (rand() % 1);
 
+        
+       
+        
+
         if (choose == 1) {
-            if (board[randomRow()][randomColumn()] != SHIP && board[randomRow() + 1][randomColumn()] != SHIP && board[randomRow() + 2][randomColumn()] != SHIP && (randomRow() + 2) <= M)
+            if (board[randomRow()][randomColumn()] != SHIP && board[randomRow() + 1][randomColumn()] != SHIP && board[randomRow() + 2][randomColumn()] != SHIP && (randomRow() + 2) < M)
             {
+                std::cout << randomRow() << randomColumn() << std::endl;
                 board[randomRow()][randomColumn()] = SHIP;
-                board[randomRow() + 1][randomColumn()] = SHIP;
-                board[randomRow() + 2][randomColumn()] = SHIP;
+                /*board[randomRow() + 1][randomColumn()] = SHIP;
+                board[randomRow() + 2][randomColumn()] = SHIP;*/
             }
 
-            else if (board[randomRow()][randomColumn()] != SHIP && board[randomRow() + 1][randomColumn()] != SHIP && board[randomRow() - 1][randomColumn()] != SHIP && (randomRow() + 1) <= M && (randomRow() - 1) >= 0)
+            /*else if (board[randomRow()][randomColumn()] != SHIP && board[randomRow() + 1][randomColumn()] != SHIP && board[randomRow() - 1][randomColumn()] != SHIP && (randomRow() + 1) <= M && (randomRow() - 1) >= 0)
             {
                 board[randomRow()][randomColumn()] = SHIP;
                 board[randomRow() + 1][randomColumn()] = SHIP;
@@ -394,7 +396,7 @@ void makeBoard3(int numberOfShips, std::vector <std::vector<char>>& board)
                 board[randomRow()][randomColumn()] = SHIP;
                 board[randomRow() -2][randomColumn()] = SHIP;
                 board[randomRow() - 1][randomColumn()] = SHIP;
-            }
+            }*/
 
             else
             {
@@ -402,16 +404,16 @@ void makeBoard3(int numberOfShips, std::vector <std::vector<char>>& board)
             }
         }
 
-        else
-        {
-            if ((randomColumn() + 2) <= N && board[randomRow()][randomColumn()] != SHIP && board[randomRow() ][randomColumn() + 1] != SHIP && board[randomRow() ][randomColumn()+2] != SHIP )
-            {
-                board[randomRow()][randomColumn()] = SHIP;
-                board[randomRow() ][randomColumn()+1] = SHIP;
-                board[randomRow() ][randomColumn()+2] = SHIP;
-            }
+        //else
+        //{
+        //    if ((randomColumn() + 2) < N && board[randomRow()][randomColumn()] != SHIP && board[randomRow() ][randomColumn() + 1] != SHIP && board[randomRow() ][randomColumn()+2] != SHIP )
+        //    {
+        //        board[randomRow()][randomColumn()] = SHIP;
+        //        board[randomRow() ][randomColumn()+1] = SHIP;
+        //        board[randomRow() ][randomColumn()+2] = SHIP;
+        //    }
 
-            else if ((randomColumn() + 1) <= N && (randomColumn() - 1) >= 0 && board[randomRow()][randomColumn()] != SHIP && board[randomRow() ][randomColumn()+1] != SHIP && board[randomRow() ][randomColumn()-1] != SHIP )
+       /*     else if ((randomColumn() + 1) <= N && (randomColumn() - 1) >= 0 && board[randomRow()][randomColumn()] != SHIP && board[randomRow() ][randomColumn()+1] != SHIP && board[randomRow() ][randomColumn()-1] != SHIP )
             {
                 board[randomRow()][randomColumn()] = SHIP;
                 board[randomRow() ][randomColumn()+1] = SHIP;
@@ -423,13 +425,13 @@ void makeBoard3(int numberOfShips, std::vector <std::vector<char>>& board)
                 board[randomRow()][randomColumn()] = SHIP;
                 board[randomRow() ][randomColumn() -1] = SHIP;
                 board[randomRow() ][randomColumn() - 2] = SHIP;
-            }
+            }*/
 
             else
             {
                 i = i - 1;
             }
         }
-    }*/
+    }
 
 }
