@@ -294,14 +294,11 @@ cell:
     std::cout << "coordinates.at(1): " << coordinates.at(1) << std::endl;
     int letters = (int)((coordinates.at(0)) - 65);
     int numbers= (int)((coordinates.at(1)) - 49);
-    //std::vector <int> numericCoordinates(2);
-  
-    //numericCoordinates.at(0) = (int)((coordinates.at(0)) - 65);
-    //numericCoordinates.at(1) = (int)((coordinates.at(1)) - 49);
+
 
     std::cout << "letters " << letters << std::endl;
     std::cout << "numbers: " << numbers << std::endl;
-    if ( (letters >= 0) && (letters <= (N-1)) && (numbers >= 0) && (numbers <= (M-1))
+    if ( (letters >= 0) && (letters <= (N-1)) && (numbers >= 0) && (numbers <= (M-1)))
     {
         if (board[numbers][letters] == 'S')
         {
